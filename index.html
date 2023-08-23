@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/styles.css">
+    <title>Meme Generator</title>
+</head>
+
+<body onload="onInit()">
+
+    <nav class="navbar">
+        <div class="logo">Meme Generator</div>
+        <ul class="page-links clean-list">
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Memes</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+
+    <section class="main-container">
+        <section class="meme-editor-container hide">
+
+            <section class="canvas-container">
+                <canvas width="400" height="400"></canvas>
+            </section>
+
+            <section class="meme-editor-controls flex flex-direction-column">
+                <input type="text" placeholder="Enter text" class="uset-text-input" oninput="onTextInput(this.value)">
+                <button class="btn btn-swtich-lines">Switch</button>
+                <button class="btn btn-add-line">Add Line</button>
+                <button class="btn btn-delete-line">Delete Line</button>
+
+                <button class="btn btn-enlarge-text-size">Enlarge text size</button>
+                <button class="btn btn-reduce-text-size">Reduce text size</button>
+                <button class="btn btn-text-justify-left">Justify left</button>
+                <button class="btn btn-text-justify-center">Justify center</button>
+                <button class="btn btn-text-justify-right">Justify right</button>
+
+                <select name="fonts">
+                    <option value="impact">IMPACT</option>
+                    <option value="not-impact">NOT IMPACT</option>
+                </select>
+
+                <button class="btn btn-brush">Brush</button>
+                <button class="btn btn-paintbucket">PaintBucket</button>
+
+                <a href="#" onclick="onDownloadClick(this)" download="file-name">Save</a>
+                <a href="#">Share</a>
+                <a href="#">Download</a>
+            </section>
+
+        </section>
+    </section>
+
+    <section class="gallery-container"></section>
+
+    <script src="js/services/util.service.js"></script>
+    <script src="js/services/storage.service.js"></script>
+    <script src="js/services/meme.service.js"></script>
+    <script src="js/services/gallery.service.js"></script>
+    <script src="js/gallery.controller.js"></script>
+    <script src="js/meme.controller.js"></script>
+</body>
+
+</html>
