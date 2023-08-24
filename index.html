@@ -4,52 +4,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <title>Mister Canvas</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <title>Meme Generator</title>
 </head>
 
 <body onload="onInit()">
 
-    <div class="container">
-        <nav class="navbar-container">
-            <label for="backgroundColorInput" class="form-label background-color">Background color picker</label>
-            <input type="color" class="form-control form-control-color background-color" id="backgroundColorInput"
-                value="#563d7c" title="Choose your color" oninput="onBgColorChange(this.value)">
-            <label for="penColorInput" class="form-label pen-color">Pen color picker</label>
-            <input type="color" class="form-control form-control-color pen-color" id="penColorInput" value="#563d7c"
-                title="Choose your color" oninput="onPenColorChange(this.value)">
+    <nav class="navbar">
+        <div class="logo">Meme Generator</div>
+        <ul class="page-links clean-list">
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Memes</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
 
-            <input type="file" class="file-input btn" name="image" onchange="onImgInput(event)" accept="image/*" />
+    <section class="main-container grid">
 
-
-            <select class="form-select select-shape" aria-label="Default select example"
-                onchange="onSetShape(this.value)">
-                <option value="squares" selected>SQUARES</option>
-                <option value="circles">CIRLCES</option>
-                <option value="triangles">TRIANGLES</option>
-                <option value="pencil">PENCIL</option>
-            </select>
-            <a href="" onclick="downloadCanvas(this)" download="file-name">Download</a>
-            <!-- <button type="button" class="btn btn-primary btn-save">SAVE</button> -->
-            <button type="button" class="btn btn-primary btn-clear" onclick="onClearCanvas()">CLEAR</button>
-            <button class="btn" onclick="onUploadImg()">
-                Upload Image from Canvas and Share on Facebook
-            </button>
-        </nav>
+        <section class="search-bar-container">
+            <input type="text" placeholder="Search meme" class="seach-bar">
+            <button class="btn btn-search">Search</button>
+            <button class="btn btn-flexible" onclick="onClickFlexible()">I'm flexible</button>
+            <input type="file" id="upload-img" class="btn btn-upload-img" name="image" onchange="onImgInput(event)"
+                accept="image/*" />
+        </section>
 
 
+        <section class="meme-editor-container hide">
 
-        <div class="canvas-container">
-            <canvas width="450" height="450"></canvas>
-        </div>
-    </div>
+            <section class="canvas-container">
+                <canvas tabindex='1' width="260" height="260"></canvas>
+            </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
-    <script src="js/services/draw.service.js"></script>
-    <script src="js/canvas.controller.js"></script>
+            <section class="meme-editor-controls flex flex-direction-column">
+                <input type="text" placeholder="Enter text" class="user-text-input" oninput="onTextInput(this.value)">
+                <div class="line-controls">
+                    <button class="btn btn-swtich-lines" onclick="switchLine()"><img src="icons/icons8_change_50px.png"
+                            alt=""></button>
+                    <button class="btn btn-add-line" onclick="onAddLine()"><img src="icons/icons8_add_50px.png"
+                            alt=""></button>
+                    <button class="btn btn-delete-line" onclick="onDeleteSelectedLine()"><img
+                            src="icons/icons8_Delete_50px.png" alt=""></button>
+                </div>
+
+                <section class="text-editor">
+                    <div class="text-controls">
+                        <button class="btn btn-enlarge-text-size" onclick="onIncreaseSize()"><img
+                                src="icons/icons8_increase_font_50px.png" alt=""></button>
+                        <button class="btn btn-reduce-text-size" onclick="onDecreaseSize()"><img
+                                src="icons/icons8_decrease_font_50px.png" alt=""></button>
+                        <button class="btn btn-text-justify-left" onclick="onSetTextAlignment('end')"><img
+                                src="icons/icons8_align_left_50px.png" alt=""></button>
+                        <button class="btn btn-text-justify-center" onclick="onSetTextAlignment('center')"><img
+                                src="icons/icons8_align_justify_50px.png" alt=""></button>
+                        <button class="btn btn-text-justify-right" onclick="onSetTextAlignment('start')"><img
+                                src="icons/icons8_align_right_50px.png" alt=""></button>
+                    </div>
+
+                    <div class="font-controls">
+                        <select name="fonts" onchange="onSetFont(this.value)">
+                            <option value="Impact">IMPACT</option>
+                            <option value="Monospace">NOT IMPACT</option>
+                        </select>
+
+                        <button class="btn btn-brush"><img src="icons/icons8_paint_brush_50px.png" alt=""></button>
+                        <button class="btn btn-paintbucket"><img src="icons/icons8_fill_color_50px.png" alt=""></button>
+                        <input type="color" class="select-text-color" oninput="onChangeTextColor(this.value)">
+                    </div>
+                </section>
+
+                <div class="stickers-container">
+                    <span class="sticker">😎</span><span class="sticker">😵</span><span class="sticker">😄</span><span
+                        class="sticker">😉</span><span class="sticker">😍</span><span class="sticker">❤</span>
+                    <!-- 🤣😂😊🤗🤩🙄😜😝🤤😒😓😔😕🙃🤑😲☹🙁😖😞😟😤😢😭😦😧😨😩🤯😬😰😱🥵🥶😳🤪😵🥴😠😡🤬😷🤒🤕🤢🤮🤧😇🥳🥺🤠🤡🤥🤫🤭🧐🤓😈👿👹-->
+                </div>
+
+                <div class="share-meme">
+                    <a href="#" onclick="onDownloadClick(this)" download="file-name">Download</a>
+                    <a href="#" onclick="onSaveMeme()">Save</a>
+                    <a href="#" onclick="onUploadImg()">Share</a>
+                </div>
+
+
+            </section>
+
+        </section>
+
+        <section class="gallery-container"></section>
+
+    </section>
+
+
+    <script src="js/services/util.service.js"></script>
+    <script src="js/services/storage.service.js"></script>
+    <script src="js/services/meme.service.js"></script>
+    <script src="js/services/gallery.service.js"></script>
+    <script src="js/gallery.controller.js"></script>
+    <script src="js/meme.controller.js"></script>
 </body>
 
 </html>

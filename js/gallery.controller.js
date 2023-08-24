@@ -15,4 +15,10 @@ function renderImages() {
 
 function onSelectImg(imgId) {
     initMemeEditor(imgId)
+    document.body.scrollTop = document.documentElement.scrollTop = 0
+}
+
+function onClickFlexible() {
+    const totalImages = getImages().length
+    initMemeEditor(getRandomInt(1, totalImages))
 }

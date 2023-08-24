@@ -1,4 +1,13 @@
 .navbar {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.111);
+    background-color: #dadada;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.111);
     margin-bottom: 1em;
+}
+
+.navbar ul {
+    align-items: center;
+}
+
+.navbar li:last-of-type {
+    margin-right: 2em;
 }

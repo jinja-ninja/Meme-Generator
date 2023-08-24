@@ -1,7 +1,9 @@
-/* .logo {
-    font-family: Handjet, sans-serif;
+.logo {
+    font-family: handjet, sans-serif;
     font-size: 2.5em;
     letter-spacing: -0.02em;
+    padding: 0.5em;
+    line-height: 1em;
 
     color: var(--clrPrimary);
-} */
+}

@@ -2,7 +2,7 @@
 
 let gElCanvas
 let gCtx
-// let gStartPos
+let gStartPos
 const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend']
 
 function initMemeEditor(imgId) {
@@ -24,19 +24,19 @@ function renderMeme() {
     elImg.src = elImg.src = `images/${meme.selectedImgId}.jpg`
     gElCanvas.height = (elImg.naturalHeight / elImg.naturalWidth) * gElCanvas.width
 
-    elImg.addEventListener('load', () => {
-        gCtx.drawImage(elImg, 0, 0, gElCanvas.width, gElCanvas.height)
+    elImg.addEventListener('load', handleMemeLoad(meme, elImg))
+    handleUserInputText()
+}
 
-        meme.lines.forEach((line, idx) => {
-            if (!line.pos) line.pos = getInitialLinePos(idx)
-            drawText(line, line.pos.x, line.pos.y)
-            setLineDimensions(line.txt, idx)
-        })
-
-        const selectedLine = meme.lines[meme.selectedLineIdx]
-        drawSelectionFrame(selectedLine.txt, selectedLine.pos.x, selectedLine.pos.y)
+function handleMemeLoad(meme, elImg) {
+    gCtx.drawImage(elImg, 0, 0, gElCanvas.width, gElCanvas.height)
+    meme.lines.forEach((line, idx) => {
+        if (!line.pos) line.pos = getInitialLinePos(idx)
+        drawText(line, line.pos.x, line.pos.y)
+        setLineDimensions(line.txt, idx)
     })
-
+    const selectedLine = meme.lines[meme.selectedLineIdx]
+    drawSelectionFrame(selectedLine.txt, selectedLine.pos.x, selectedLine.pos.y)
 }
 
 function getInitialLinePos(idx) {
@@ -52,7 +52,8 @@ function resizeCanvas() {
 
 function addListiners() {
     addMouseListeners()
-    // addTouchListeners()
+    addTouchListeners()
+    addArrowKeysListener()
     window.addEventListener('resize', () => {
         resizeCanvas()
         renderMeme()
@@ -83,17 +84,76 @@ function onDown(ev) {
     const click = checkClick(pos)
     if (!click.isLine) return
     meme.selectedLineIdx = click.lineIdx
+
+    handleUserInputText()
     renderMeme()
-    // setCircleDrag(true)
-    //Save the pos we start from
-    // gStartPos = pos
-    // document.body.style.cursor = 'grabbing'
+    setLineDrag(true)
+    gStartPos = pos
+    document.body.style.cursor = 'grabbing'
 }
 
 function onMove(ev) {
-    const { offsetX, offsetY, clientX, clientY } = ev
-    // console.log('offsetX, offsetY:', offsetX, offsetY)
-    // console.log(' clientX, clientY:', clientX, clientY)
+    const meme = getMeme()
+    if (!meme.lines[meme.selectedLineIdx].isDrag) return
+
+    const pos = getEvPos(ev)
+    const dx = pos.x - gStartPos.x
+    const dy = pos.y - gStartPos.y
+    moveLine(dx, dy)
+    // Save the last pos, we remember where we`ve been and move accordingly
+    gStartPos = pos
+    renderMeme()
+}
+
+function onUp() {
+    setLineDrag(false)
+    document.body.style.cursor = 'default'
+}
+
+function changePlaceholderText(text) {
+    getDomElement('.user-text-input').placeholder = text
+}
+
+function clearUserTextInput() {
+    const elInput = getDomElement('.user-text-input')
+    elInput.value = ''
+}
+
+function onSaveMeme() {
+    saveMemeToStorage()
+}
+
+function handleUserInputText() {
+    clearUserTextInput()
+
+    const lineText = getLineText()
+    const elInput = getDomElement('.user-text-input')
+
+    if (lineText === 'Enter Text Here') {
+        elInput.value = ''
+        elInput.placeholder = 'Enter Text Here'
+    } else elInput.value = lineText
+}
+
+function getLineText() {
+    const meme = getMeme()
+    return meme.lines[meme.selectedLineIdx].txt
+}
+
+function onDeleteSelectedLine() {
+    deleteSelectedLine()
+    clearUserTextInput()
+    renderMeme()
+}
+
+function onSetTextAlignment(align) {
+    setTextAlignment(align)
+    renderMeme()
+}
+
+function onSetFont(font) {
+    setLineFont(font)
+    renderMeme()
 }
 
 function onIncreaseSize() {
@@ -117,6 +177,7 @@ function onTextInput(text) {
 
 function onAddLine() {
     addLine()
+    clearUserTextInput()
     renderMeme()
 }
 
@@ -132,19 +193,16 @@ function drawSelectionFrame(text, x, y) {
 }
 
 function drawText(line, x, y) {
-    const text = line.txt
-    const txtSize = line.size
-    const txtColor = line.color
 
     gCtx.lineWidth = 1
     gCtx.strokeStyle = 'white'
-    gCtx.fillStyle = txtColor
-    gCtx.font = `${txtSize}px Impact`
-    gCtx.textAlign = 'center'
+    gCtx.fillStyle = line.color
+    gCtx.font = `${line.size}px ${line.font}`
+    gCtx.textAlign = `${line.align}`
     gCtx.textBaseline = 'middle'
 
-    gCtx.fillText(text, x, y)
-    gCtx.strokeText(text, x, y)
+    gCtx.fillText(line.txt, x, y)
+    gCtx.strokeText(line.txt, x, y)
 }
 
 function getEvPos(ev) {
@@ -162,14 +220,118 @@ function getEvPos(ev) {
     } return pos
 }
 
+function onMoveLineYAxis(ev) {
+    ev.preventDefault()
+    if (ev.key === 'ArrowUp') moveRowYAxis(-1)
+    else moveRowYAxis(1)
+    renderMeme()
+}
+
+function onKeyPressed(ev) {
+    ev.preventDefault()
+
+    if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') onMoveLineYAxis(ev)
+    else if (isPrintableKey(ev)) {
+        addCharToLine(ev.key)
+        // removeCharFromLine()
+        renderMeme()
+    }
+    else return
+}
+
+function isPrintableKey(ev) {
+    const keycode = ev.keyCode
+    let valid =
+        (keycode > 47 && keycode < 58) || // number keys
+        keycode === 32 || keycode === 13 || // spacebar & return key(s)
+        keycode === 8 || keycode === 46 || // backspace & delete key(s) 
+        (keycode > 64 && keycode < 91) || // letter keys
+        (keycode > 95 && keycode < 112) || // numpad keys
+        (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+        (keycode > 218 && keycode < 223)   // [\]' (in order)
+    return valid
+}
+
 function addMouseListeners() {
     gElCanvas.addEventListener('mousedown', onDown)
     gElCanvas.addEventListener('mousemove', onMove)
-    // gElCanvas.addEventListener('mouseup', onUp)
+    gElCanvas.addEventListener('mouseup', onUp)
 }
 
 function addTouchListeners() {
     gElCanvas.addEventListener('touchstart', onDown)
-    // gElCanvas.addEventListener('touchmove', onMove)
-    // gElCanvas.addEventListener('touchend', onUp)
+    gElCanvas.addEventListener('touchmove', onMove)
+    gElCanvas.addEventListener('touchend', onUp)
 }
+
+function addArrowKeysListener() {
+    gElCanvas.addEventListener('keydown', onKeyPressed)
+}
+
+function onUploadImg() {
+    // Gets the image from the canvas
+    const imgDataUrl = gElCanvas.toDataURL('image/jpeg')
+
+    function onSuccess(uploadedImgUrl) {
+        // Handle some special characters
+        const url = encodeURIComponent(uploadedImgUrl)
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&t=${url}`)
+    }
+
+    // Send the image to the server
+    doUploadImg(imgDataUrl, onSuccess)
+}
+
+// Upload the image to a server, get back a URL 
+// call the function onSuccess when done
+function doUploadImg(imgDataUrl, onSuccess) {
+    // Pack the image for delivery
+    const formData = new FormData()
+    formData.append('img', imgDataUrl)
+
+    // Send a post req with the image to the server
+    const XHR = new XMLHttpRequest()
+    XHR.onreadystatechange = () => {
+        // If the request is not done, we have no business here yet, so return
+        if (XHR.readyState !== XMLHttpRequest.DONE) return
+        // if the response is not ok, show an error
+        if (XHR.status !== 200) return console.error('Error uploading image')
+        const { responseText: url } = XHR
+        // Same as
+        // const url = XHR.responseText
+
+        // If the response is ok, call the onSuccess callback function, 
+        // that will create the link to facebook using the url we got
+        console.log('Got back live url:', url)
+        onSuccess(url)
+    }
+    XHR.onerror = (req, ev) => {
+        console.error('Error connecting to server with request:', req, '\nGot response data:', ev)
+    }
+    XHR.open('POST', '//ca-upload.com/here/upload.php')
+    XHR.send(formData)
+}
+
+
+function onImgInput(ev) {
+    loadImageFromInput(ev, renderImg)
+}
+
+// Read the file from the input
+// When done send the image to the callback function
+function loadImageFromInput(ev, onImageReady) {
+    const reader = new FileReader()
+
+    reader.onload = function (event) {
+        let img = new Image()
+        img.src = event.target.result
+        img.onload = () => onImageReady(img)
+    }
+    reader.readAsDataURL(ev.target.files[0])
+}
+
+function renderImg(img) {
+    // Draw the img on the canvas
+    gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
+}
+

@@ -2,6 +2,7 @@
 
 const FONT_DIFF = 5
 
+
 let gKeywordSearchCountMap = { 'funny': 12, 'cat': 16, 'baby': 2 }
 let gMeme = {
     selectedImgId: 5,
@@ -10,6 +11,9 @@ let gMeme = {
         txt: 'Enter Text Here',
         size: 40,
         color: 'black',
+        font: 'Impact',
+        align: 'center',
+        isDrag: false
     }]
 }
 
@@ -21,6 +25,17 @@ function setMemeImgId(imgId) {
     gMeme.selectedImgId = imgId
 }
 
+function setTextAlignment(align) {
+    gMeme.lines[gMeme.selectedLineIdx].align = align
+}
+
+function setLineDrag(bool) {
+    gMeme.lines[gMeme.selectedLineIdx].isDrag = bool
+}
+
+function setLineFont(font) {
+    gMeme.lines[gMeme.selectedLineIdx].font = font
+}
 function setFontSize(diff) {
     gMeme.lines[gMeme.selectedLineIdx].size += diff * FONT_DIFF
 }
@@ -33,9 +48,22 @@ function setLineText(text) {
     gMeme.lines[gMeme.selectedLineIdx].txt = text
 }
 
+function addCharToLine(char) {
+    gMeme.lines[gMeme.selectedLineIdx].txt += char
+}
+
 function addLine() {
     gMeme.selectedLineIdx += 1
     gMeme.lines = [...gMeme.lines, _createLine()]
+}
+
+function moveRowYAxis(diff) {
+    gMeme.lines[gMeme.selectedLineIdx].pos.y += diff * 10
+}
+
+function moveLine(dx, dy) {
+    gMeme.lines[gMeme.selectedLineIdx].pos.x += dx
+    gMeme.lines[gMeme.selectedLineIdx].pos.y += dy
 }
 
 function _createLine() {
@@ -43,7 +71,26 @@ function _createLine() {
         txt: 'Enter Text Here',
         size: 40,
         color: 'black',
+        font: 'Impact',
+        align: 'center',
+        isDrag: false
     }
+}
+
+function getMemsFromStorage() {
+    let savedMems = loadFromStorage('savedMems')
+    if (!savedMems || !savedMems.length) savedMems = []
+    return savedMems
+}
+
+function saveMemeToStorage() {
+    const savedMems = getMemsFromStorage()
+    savedMems.push(structuredClone(gMeme))
+    saveToStorage('savedMems', savedMems)
+}
+
+function deleteSelectedLine() {
+    gMeme.lines.splice(gMeme.selectedLineIdx, 1)
 }
 
 function checkClick(clickedPos) {

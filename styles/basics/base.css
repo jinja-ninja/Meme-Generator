@@ -24,6 +24,7 @@ p {
 
 body {
     margin: 0;
+    background-color: #f1f1f1;
 }
 
 img {
@@ -61,7 +62,7 @@ a {
     height: 15px;
 }
 
-.btn:hover {
+/* .btn:hover {
     color: #00c8ff;
     border-color: #53ff64;
-}
+} */

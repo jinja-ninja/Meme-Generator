@@ -1,0 +1,91 @@
+.search-bar-container {
+    display: flex;
+    background-color: #fafafa;
+    border: 2px solid #cccccc;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    border-radius: 0.3em;
+}
+
+.search-bar-container .seach-bar {
+    flex-grow: 1;
+    font-family: 'josefin';
+    padding: 0.7em;
+    background-color: #fafafa;
+    border-color: #cccccc;
+    border-style: solid;
+    border-radius: 0.5em;
+    margin-inline-end: 1em;
+}
+
+.search-bar-container .btn-search,
+.btn-flexible {
+    font-family: 'josefin';
+    font-size: 0.9rem;
+    padding: 0.2em 0.5em;
+    background-color: #fafafa;
+    border-width: 2px;
+    border-color: #cccccc;
+    border-style: solid;
+    border-radius: 0.5em;
+    margin: 0;
+    margin-inline-end: 0.5em;
+    transition: background-color .3s;
+}
+
+.search-bar-container .btn-search:hover {
+    background-color: #eeeeee;
+}
+
+.search-bar-container .btn-flexible {
+    font-family: 'josefin';
+    font-size: 0.9rem;
+    padding: 0.2em 0.5em;
+    background-color: #fafafa;
+    border-width: 2px;
+    border-color: #cccccc;
+    border-style: solid;
+    border-radius: 0.5em;
+    margin: 0;
+    margin-inline-end: 0.5em;
+    transition: background-color .3s;
+}
+
+.search-bar-container .btn-flexible:hover {
+    background-color: #eeeeee;
+
+}
+
+.search-bar-container .btn-upload-img {
+    font-family: 'josefin';
+    font-size: 0.9rem;
+    padding: 0.2em 0.5em;
+    color: rgb(255, 255, 255);
+    background-color: #cecece;
+    border-width: 2px;
+    border-color: #cccccc;
+    border-style: solid;
+    border-radius: 0.5em;
+    margin: 0;
+    margin-inline-end: 0.5em;
+    transition: background-color .3s;
+}
+
+.search-bar-container .btn-upload-img:hover {
+    background-color: #c1c1c1;
+}
+
+#file-upload-button {
+    font-family: 'josefin';
+    font-size: 0.9rem;
+    padding: 0.2em 0.5em;
+    color: rgb(255, 255, 255);
+    background-color: #cecece;
+    border-width: 2px;
+    border-color: #cccccc;
+    border-style: solid;
+    border-radius: 0.5em;
+    margin: 0;
+    margin-inline-end: 0.5em;
+    transition: background-color .3s;
+}

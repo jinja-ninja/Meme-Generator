@@ -1,0 +1,14 @@
+/* MOBILE */
+@media (max-width: 710px) {
+    .meme-editor-container {
+        grid-template-columns: none;
+        justify-items: center;
+    }
+}
+
+/* Small and Larger */
+@media (min-width: 710px) {
+    .meme-editor-container {
+        grid-template-columns: auto 1fr;
+    }
+}
