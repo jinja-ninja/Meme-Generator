@@ -1,0 +1,9 @@
+.meme-editor-container {
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+
+    padding: 2em;
+    border: 2px solid black;
+    border-radius: 2em;
+    margin-bottom: 1em;
+}

@@ -19,32 +19,48 @@
         </ul>
     </nav>
 
-    <section class="main-container">
+    <section class="main-container grid">
         <section class="meme-editor-container hide">
 
             <section class="canvas-container">
-                <canvas width="400" height="400"></canvas>
+                <canvas width="260" height="260"></canvas>
             </section>
 
             <section class="meme-editor-controls flex flex-direction-column">
                 <input type="text" placeholder="Enter text" class="uset-text-input" oninput="onTextInput(this.value)">
-                <button class="btn btn-swtich-lines">Switch</button>
-                <button class="btn btn-add-line">Add Line</button>
-                <button class="btn btn-delete-line">Delete Line</button>
+                <div class="line-controls">
+                    <button class="btn btn-swtich-lines" onclick="switchLine()"><img src="icons/icons8_change_50px.png"
+                            alt=""></button>
+                    <button class="btn btn-add-line" onclick="onAddLine()"><img src="icons/icons8_add_50px.png"
+                            alt=""></button>
+                    <button class="btn btn-delete-line"><img src="icons/icons8_Delete_50px.png" alt=""></button>
+                </div>
 
-                <button class="btn btn-enlarge-text-size">Enlarge text size</button>
-                <button class="btn btn-reduce-text-size">Reduce text size</button>
-                <button class="btn btn-text-justify-left">Justify left</button>
-                <button class="btn btn-text-justify-center">Justify center</button>
-                <button class="btn btn-text-justify-right">Justify right</button>
+                <section class="text-editor">
+                    <div class="text-controls">
+                        <button class="btn btn-enlarge-text-size" onclick="onIncreaseSize()"><img
+                                src="icons/icons8_increase_font_50px.png" alt=""></button>
+                        <button class="btn btn-reduce-text-size" onclick="onDecreaseSize()"><img
+                                src="icons/icons8_decrease_font_50px.png" alt=""></button>
+                        <button class="btn btn-text-justify-left"><img src="icons/icons8_align_left_50px.png"
+                                alt=""></button>
+                        <button class="btn btn-text-justify-center"><img src="icons/icons8_align_justify_50px.png"
+                                alt=""></button>
+                        <button class="btn btn-text-justify-right"><img src="icons/icons8_align_right_50px.png"
+                                alt=""></button>
+                    </div>
 
-                <select name="fonts">
-                    <option value="impact">IMPACT</option>
-                    <option value="not-impact">NOT IMPACT</option>
-                </select>
+                    <div class="font-controls">
+                        <select name="fonts">
+                            <option value="impact">IMPACT</option>
+                            <option value="not-impact">NOT IMPACT</option>
+                        </select>
 
-                <button class="btn btn-brush">Brush</button>
-                <button class="btn btn-paintbucket">PaintBucket</button>
+                        <button class="btn btn-brush"><img src="icons/icons8_paint_brush_50px.png" alt=""></button>
+                        <button class="btn btn-paintbucket"><img src="icons/icons8_fill_color_50px.png" alt=""></button>
+                        <input type="color" class="select-text-color" oninput="onChangeTextColor(this.value)">
+                    </div>
+                </section>
 
                 <a href="#" onclick="onDownloadClick(this)" download="file-name">Save</a>
                 <a href="#">Share</a>
@@ -52,9 +68,11 @@
             </section>
 
         </section>
+
+        <section class="gallery-container"></section>
+
     </section>
 
-    <section class="gallery-container"></section>
 
     <script src="js/services/util.service.js"></script>
     <script src="js/services/storage.service.js"></script>
