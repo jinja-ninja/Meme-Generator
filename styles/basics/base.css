@@ -4,7 +4,7 @@
 
 html {
     font-family: josefin, sans-serif;
-    color: var(--clrPrimary);
+    color: var(--clrTxt);
     line-height: 1.25rem;
 }
 
@@ -24,7 +24,7 @@ p {
 
 body {
     margin: 0;
-    background-color: #f1f1f1;
+    background-color: var(--bgColor);
 }
 
 img {
@@ -32,37 +32,29 @@ img {
 }
 
 a {
-    color: var(--clrPrimary);
+    color: var(--clrTxt);
     text-decoration: none;
 }
 
 /* btns */
 
 .btn {
-    all: unset;
-    letter-spacing: 0.03em;
-    font-weight: 100;
-    color: var(--clrPrimary);
-    /* background-color: rgb(255, 255, 255); */
-    /* border: 2px solid var(--clrPrimary); */
-    /* padding: 0.25em 0.25em; */
-    margin: .25em;
-    font-size: 1rem;
-    font-family: inherit;
-    cursor: pointer;
+    font-family: 'josefin';
+    font-size: 0.9rem;
 
-    transition:
-        color 0.3s,
-        border-color 0.3s,
-        padding 0.6s;
+    padding: 0.2em 0.5em;
+
+    border-width: 2px;
+    border-color: var(--clrPrimary-1);
+    border-style: solid;
+    border-radius: 0.5em;
+
+    background-color: var(--clrPrimary);
+
+    transition: background-color
 }
 
 .btn img {
     width: 15px;
     height: 15px;
 }
-
-/* .btn:hover {
-    color: #00c8ff;
-    border-color: #53ff64;
-} */

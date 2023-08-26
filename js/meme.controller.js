@@ -13,15 +13,15 @@ function initMemeEditor(imgId) {
 
     addListiners()
     resizeCanvas()
-    setMemeImgId(imgId)
+    setMeme(imgId)
     renderMeme()
 }
 
 function renderMeme() {
     const meme = getMeme()
     const elImg = new Image()
-
-    elImg.src = elImg.src = `images/${meme.selectedImgId}.jpg`
+    if (meme.dataUrl) elImg.src = meme.dataUrl
+    else elImg.src = `images/${meme.selectedImgId}.jpg`
     gElCanvas.height = (elImg.naturalHeight / elImg.naturalWidth) * gElCanvas.width
 
     elImg.addEventListener('load', handleMemeLoad(meme, elImg))
@@ -71,10 +71,16 @@ function DisplayMemeEditor() {
     addClass('.meme-editor-container', 'grid')
 }
 
-function switchLine() {
-    const meme = getMeme()
-    meme.selectedLineIdx++
-    if (meme.selectedLineIdx === meme.lines.length) meme.selectedLineIdx = 0
+function hideMemeEditor() {
+    addClass('.meme-editor-container', 'hide')
+    removeClass('.meme-editor-container', 'grid')
+    onFilterClick('')
+    getDomElement('.filter-by-selector').value = ''
+    setFilterSearch('')
+}
+
+function onSwitchLine() {
+    switchLine()
     renderMeme()
 }
 
@@ -83,8 +89,8 @@ function onDown(ev) {
     const pos = getEvPos(ev)
     const click = checkClick(pos)
     if (!click.isLine) return
-    meme.selectedLineIdx = click.lineIdx
 
+    meme.selectedLineIdx = click.lineIdx
     handleUserInputText()
     renderMeme()
     setLineDrag(true)
@@ -93,14 +99,14 @@ function onDown(ev) {
 }
 
 function onMove(ev) {
-    const meme = getMeme()
+    const meme = getMeme() // This happens tons of times in a sec, is it good?
+    if (meme.selectedLineIdx > meme.lines.length || !meme.lines.length) return
     if (!meme.lines[meme.selectedLineIdx].isDrag) return
 
     const pos = getEvPos(ev)
     const dx = pos.x - gStartPos.x
     const dy = pos.y - gStartPos.y
     moveLine(dx, dy)
-    // Save the last pos, we remember where we`ve been and move accordingly
     gStartPos = pos
     renderMeme()
 }
@@ -140,8 +146,14 @@ function getLineText() {
     return meme.lines[meme.selectedLineIdx].txt
 }
 
+function onStickerClick(sticker) {
+    addLine(sticker)
+    renderMeme()
+}
+
 function onDeleteSelectedLine() {
     deleteSelectedLine()
+    switchLine()
     clearUserTextInput()
     renderMeme()
 }
@@ -193,7 +205,6 @@ function drawSelectionFrame(text, x, y) {
 }
 
 function drawText(line, x, y) {
-
     gCtx.lineWidth = 1
     gCtx.strokeStyle = 'white'
     gCtx.fillStyle = line.color
@@ -229,7 +240,6 @@ function onMoveLineYAxis(ev) {
 
 function onKeyPressed(ev) {
     ev.preventDefault()
-
     if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') onMoveLineYAxis(ev)
     else if (isPrintableKey(ev)) {
         addCharToLine(ev.key)
@@ -313,15 +323,22 @@ function doUploadImg(imgDataUrl, onSuccess) {
 }
 
 
-function onImgInput(ev) {
+function onImgInput(ev) { // Patch Solution - how to make it elegant?
+    DisplayMemeEditor()
+
+    gElCanvas = document.querySelector('canvas')
+    gCtx = gElCanvas.getContext('2d')
+
+    addListiners()
+    resizeCanvas()
     loadImageFromInput(ev, renderImg)
+    createCustomMeme()
 }
 
 // Read the file from the input
 // When done send the image to the callback function
 function loadImageFromInput(ev, onImageReady) {
     const reader = new FileReader()
-
     reader.onload = function (event) {
         let img = new Image()
         img.src = event.target.result
@@ -331,7 +348,19 @@ function loadImageFromInput(ev, onImageReady) {
 }
 
 function renderImg(img) {
-    // Draw the img on the canvas
+    setImgDataUrl(img.src)
+    const meme = getMeme()
+    gElCanvas.height = (img.naturalHeight / img.naturalWidth) * gElCanvas.width
+
     gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
+    meme.lines.forEach((line, idx) => {
+        if (!line.pos) line.pos = getInitialLinePos(idx)
+        drawText(line, line.pos.x, line.pos.y)
+        setLineDimensions(line.txt, idx)
+    })
+    const selectedLine = meme.lines[meme.selectedLineIdx]
+    drawSelectionFrame(selectedLine.txt, selectedLine.pos.x, selectedLine.pos.y)
+    // Draw the img on the canvas
+    // gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 }
 

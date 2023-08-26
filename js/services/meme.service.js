@@ -2,9 +2,9 @@
 
 const FONT_DIFF = 5
 
-
-let gKeywordSearchCountMap = { 'funny': 12, 'cat': 16, 'baby': 2 }
-let gMeme = {
+let gKeywordSearchCountMap = { 'you': 12, 'cat': 16, 'kid': 2, 'dog': 9, 'politics': 1, 'evil': 5 } //How to do it with whole words??
+let gMeme = { // How to make it without the double initialization in lines?
+    dataUrl: null,
     selectedImgId: 5,
     selectedLineIdx: 0,
     lines: [{
@@ -13,7 +13,8 @@ let gMeme = {
         color: 'black',
         font: 'Impact',
         align: 'center',
-        isDrag: false
+        isDrag: false,
+        isSticker: false
     }]
 }
 
@@ -21,8 +22,15 @@ function getMeme() {
     return gMeme
 }
 
-function setMemeImgId(imgId) {
+function updateKeywordsCountMap(keyword) {
+    if (keyword === '') return
+    else if (gKeywordSearchCountMap[keyword] === undefined) gKeywordSearchCountMap[keyword] = 0
+    else gKeywordSearchCountMap[keyword] += 1
+}
+
+function setMeme(imgId) {
     gMeme.selectedImgId = imgId
+    gMeme.dataUrl = null
 }
 
 function setTextAlignment(align) {
@@ -52,9 +60,24 @@ function addCharToLine(char) {
     gMeme.lines[gMeme.selectedLineIdx].txt += char
 }
 
-function addLine() {
+function switchLine() {
+    gMeme.selectedLineIdx++
+    if (gMeme.selectedLineIdx === gMeme.lines.length) gMeme.selectedLineIdx = 0
+}
+
+function addLine(text = undefined) {
     gMeme.selectedLineIdx += 1
-    gMeme.lines = [...gMeme.lines, _createLine()]
+    if (text) {
+        gMeme.lines = [...gMeme.lines, _createLine(text)]
+        gMeme.lines[gMeme.selectedLineIdx].isSticker = true
+    } else gMeme.lines = [...gMeme.lines, _createLine()]
+}
+
+function addSticker(sticker = undefined) {
+    if (gMeme.selectedSticker === undefined) gMeme.selectedSticker = 0
+    else gMeme.selectedSticker++
+
+    gMeme.stickers = []
 }
 
 function moveRowYAxis(diff) {
@@ -66,15 +89,25 @@ function moveLine(dx, dy) {
     gMeme.lines[gMeme.selectedLineIdx].pos.y += dy
 }
 
-function _createLine() {
+function setImgDataUrl(url) {
+    gMeme.dataUrl = url
+}
+
+function _createLine(text = undefined) {
     return {
-        txt: 'Enter Text Here',
+        txt: text ? text : 'Enter Text Here',
         size: 40,
         color: 'black',
         font: 'Impact',
         align: 'center',
-        isDrag: false
+        isDrag: false,
+        isSticker: false
     }
+}
+
+function createCustomMeme() {
+    gMeme.selectedLineIdx = 0
+    gMeme.lines = [_createLine()]
 }
 
 function getMemsFromStorage() {

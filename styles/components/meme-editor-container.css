@@ -3,53 +3,17 @@
     column-gap: 20px;
 
     padding: 1em;
-    border: 2px solid #cccccc;
-    background-color: #fafafa;
+    border: 2px solid var(--clrPrimary-1);
+    background-color: var(--clrPrimary);
     border-radius: 0.5em;
-    margin-bottom: 1em;
+    margin: 0 0 1em 0;
 }
 
-.meme-editor-container .share-meme {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    background-color: #dfdfdf;
+.meme-editor-container .canvas-container {
+    width: 50vw;
+}
+
+.meme-editor-container canvas {
     border-radius: 0.5em;
-    padding: 0.75em;
-    margin: 0.5em;
-}
-
-.meme-editor-container .share-meme a {
-    border-width: 2px;
-    border-color: #cccccc;
-    border-style: solid;
-    border-radius: 0.5em;
-    font-family: 'josefin';
-    padding: 0.2em 0.5em;
-    background-color: #fafafa;
-    transition: background-color .3s;
-}
-
-.meme-editor-container .share-meme a:hover {
-    background-color: #eeeeee;
-}
-
-.meme-editor-container .stickers-container {
-    display: flex;
-    justify-content: center;
-    background-color: #dfdfdf;
-    border-radius: 0.5em;
-    padding: 0.75em;
-    margin: 0.5em;
-    width: 100%;
-}
-
-.meme-editor-container .sticker {
-    transition: font-size .3s;
-    cursor: pointer;
-}
-
-.meme-editor-container .sticker:hover {
-    font-size: 2em;
-    scale: 1.3;
+    box-shadow: 0 0 2px 2px #c3c3c3;
 }

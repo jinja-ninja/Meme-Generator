@@ -1,7 +1,24 @@
 'use strict'
 
+let gCurrLang = true // true: EN, false: HE
 let gImgs
 let gImgId = 1
+let gFilterBy = { theme: '', search: '' }
+
+const gTrans = {
+    logo: {
+        en: 'Meme Generator',
+        he: 'מחולל הממים'
+    },
+    search: {
+        en: 'Search Meme',
+        he: 'חפש מם'
+    },
+    btnFlex: {
+        en: `I'm flexible`,
+        he: 'גמיש אנוכי'
+    }
+}
 
 _createImages()
 function _createImages() {
@@ -32,6 +49,75 @@ function addImage(keywords) {
     return img
 }
 
-function getImages() {
-    return gImgs
+function getImages() { // Made a potato salad here
+    let filteredImages = filterImages(gFilterBy.theme)
+    let imagesToShow = searchMeme(filteredImages, gFilterBy.search)
+    return imagesToShow
+}
+
+function getWordsMap() {
+    return gKeywordSearchCountMap
+}
+
+function getCurrentLang() {
+    return gCurrLang
+}
+
+function setFilterTheme(filterBy = '') {
+    gFilterBy.theme = filterBy
+}
+
+function setFilterSearch(search = '') {
+    gFilterBy.search = search
+}
+
+function setLang() {
+    gCurrLang = !gCurrLang
+    doTrans()
+}
+
+function getTrans(transKey) {
+    // get from gTrans
+    const transMap = gTrans[transKey] // {'en':,'es:','he':}
+    // if key is unknown return 'UNKNOWN'
+    if (!transMap) return 'UNKNOWN'
+    let transTxt
+    if (gCurrLang) transTxt = transMap['en']
+    else transTxt = transMap['he']
+    // let transTxt = transMap[gCurrLang]
+    // If translation not found - use english
+    if (!transTxt) transTxt = transMap.en
+    return transTxt
+}
+
+function doTrans() {
+    const els = document.querySelectorAll('[data-trans]')
+    els.forEach(el => {
+        const transKey = el.dataset.trans
+        const transTxt = getTrans(transKey)
+        if (el.placeholder) el.placeholder = transTxt
+        else el.innerText = transTxt
+    })
+}
+
+function clearFilter() {
+    gImgId = 1
+    _createImages()
+}
+
+function searchMeme(images, key) {
+    const filteredImages = images.filter(img => img.keywords.find(keyword => keyword.includes(key)))
+    return filteredImages
+}
+
+function filterImages(filterBy) { // Must Be a Better Way
+    const filteredImages = []
+    if (filterBy === '') {
+        clearFilter()
+        return gImgs
+    }
+    gImgs.filter(img => {
+        if (img.keywords.includes(filterBy.toLowerCase())) filteredImages.push(img)
+    })
+    return filteredImages
 }

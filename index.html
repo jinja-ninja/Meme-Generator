@@ -11,23 +11,33 @@
 <body onload="onInit()">
 
     <nav class="navbar">
-        <div class="logo">Meme Generator</div>
-        <ul class="page-links clean-list">
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">Memes</a></li>
-            <li><a href="#">About</a></li>
+        <div class="logo" data-trans="logo" onclick="hideMemeEditor()">Meme Generator</div>
+        <ul class=" page-links clean-list">
+            <!-- <li><a href="#" onclick="hideMemeEditor()">Gallery</a></li> -->
+            <li><a href="#" class="change-lang" onclick="onSetLang()">EN</a></li>
         </ul>
     </nav>
 
     <section class="main-container grid">
 
         <section class="search-bar-container">
-            <input type="text" placeholder="Search meme" class="seach-bar">
-            <button class="btn btn-search">Search</button>
-            <button class="btn btn-flexible" onclick="onClickFlexible()">I'm flexible</button>
-            <input type="file" id="upload-img" class="btn btn-upload-img" name="image" onchange="onImgInput(event)"
-                accept="image/*" />
+            <select name="themes" placeholder="Filter by theme" class="filter-by-selector"
+                onchange="onFilterClick(this.value)"> <!--How to do it with form and datalist and Submit?-->
+                <!--Expalin how to look at 'event' and at 'this'-->
+                <option value="">Select Theme</option>
+                <option value="kid">Kids</option>
+                <option value="beach">Beach</option>
+                <option value="dogs">Dogs</option>
+                <option value="evil">Evil</option>
+            </select>
+            <input type="file" class="btn btn-upload-img" name="image" onchange="onImgInput(event)"
+                accept="image/*" /><!--How to Center Text here?-->
+            <input type="text" data-trans="search" placeholder="Search meme" class="search-bar"
+                oninput="onSearchMeme(this.value)">
+            <button class="btn btn-flexible" data-trans="btnFlex" onclick="onClickFlexible()">I'm flexible</button>
         </section>
+
+        <section class="word-cloud-container"></section>
 
 
         <section class="meme-editor-container hide">
@@ -39,8 +49,8 @@
             <section class="meme-editor-controls flex flex-direction-column">
                 <input type="text" placeholder="Enter text" class="user-text-input" oninput="onTextInput(this.value)">
                 <div class="line-controls">
-                    <button class="btn btn-swtich-lines" onclick="switchLine()"><img src="icons/icons8_change_50px.png"
-                            alt=""></button>
+                    <button class="btn btn-swtich-lines" onclick="onSwitchLine()"><img
+                            src="icons/icons8_change_50px.png" alt=""></button>
                     <button class="btn btn-add-line" onclick="onAddLine()"><img src="icons/icons8_add_50px.png"
                             alt=""></button>
                     <button class="btn btn-delete-line" onclick="onDeleteSelectedLine()"><img
@@ -50,7 +60,7 @@
                 <section class="text-editor">
                     <div class="text-controls">
                         <button class="btn btn-enlarge-text-size" onclick="onIncreaseSize()"><img
-                                src="icons/icons8_increase_font_50px.png" alt=""></button>
+                                src="icons/icons8_increase_font_50px.png" alt=""></button><!-- How to do it with SVG?-->
                         <button class="btn btn-reduce-text-size" onclick="onDecreaseSize()"><img
                                 src="icons/icons8_decrease_font_50px.png" alt=""></button>
                         <button class="btn btn-text-justify-left" onclick="onSetTextAlignment('end')"><img
@@ -66,17 +76,19 @@
                             <option value="Impact">IMPACT</option>
                             <option value="Monospace">NOT IMPACT</option>
                         </select>
-
-                        <button class="btn btn-brush"><img src="icons/icons8_paint_brush_50px.png" alt=""></button>
-                        <button class="btn btn-paintbucket"><img src="icons/icons8_fill_color_50px.png" alt=""></button>
                         <input type="color" class="select-text-color" oninput="onChangeTextColor(this.value)">
                     </div>
                 </section>
 
                 <div class="stickers-container">
-                    <span class="sticker">😎</span><span class="sticker">😵</span><span class="sticker">😄</span><span
-                        class="sticker">😉</span><span class="sticker">😍</span><span class="sticker">❤</span>
-                    <!-- 🤣😂😊🤗🤩🙄😜😝🤤😒😓😔😕🙃🤑😲☹🙁😖😞😟😤😢😭😦😧😨😩🤯😬😰😱🥵🥶😳🤪😵🥴😠😡🤬😷🤒🤕🤢🤮🤧😇🥳🥺🤠🤡🤥🤫🤭🧐🤓😈👿👹-->
+                    <span class="sticker" onclick="onStickerClick(this.innerText)">😎</span>
+                    <!-- That's the stupidest way possible-->
+                    <span class="sticker" onclick="onStickerClick(this.innerText)">😵</span>
+                    <!-- How to make them draggable to the Canvas?-->
+                    <span class="sticker" onclick="onStickerClick(this.innerText)">😄</span>
+                    <span class="sticker" onclick="onStickerClick(this.innerText)">😉</span>
+                    <span class="sticker" onclick="onStickerClick(this.innerText)">😍</span>
+                    <span class="sticker" onclick="onStickerClick(this.innerText)">❤</span>
                 </div>
 
                 <div class="share-meme">
