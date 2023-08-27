@@ -72,12 +72,12 @@ function DisplayMemeEditor() {
 }
 
 function hideMemeEditor() {
-    debugger
     addClass('.meme-editor-container', 'hide')
     removeClass('.meme-editor-container', 'grid')
-    onFilterClick('')
     getDomElement('.filter-by-selector').value = ''
-    setFilterSearch('')
+    getDomElement('.search-bar').value = ''
+    onFilterClick('')
+    onSearchMeme('')
 }
 
 function onSwitchLine() {

@@ -24,11 +24,11 @@
             <select name="themes" placeholder="Filter by theme" class="filter-by-selector"
                 onchange="onFilterClick(this.value)"> <!--How to do it with form and datalist and Submit?-->
                 <!--Expalin how to look at 'event' and at 'this'-->
-                <option value="">Select Theme</option>
-                <option value="kid">Kids</option>
-                <option value="beach">Beach</option>
-                <option value="dogs">Dogs</option>
-                <option value="evil">Evil</option>
+                <option value="" data-trans="select-theme-all">Select Theme</option>
+                <option value="kid" data-trans="select-theme-kids">Kids</option>
+                <option value="beach" data-trans="select-theme-beach">Beach</option>
+                <option value="dogs" data-trans="select-theme-dogs">Dogs</option>
+                <option value="evil" data-trans="select-theme-evil">Evil</option>
             </select>
             <input type="file" class="btn btn-upload-img" name="image" onchange="onImgInput(event)"
                 accept="image/*" /><!--How to Center Text here?-->

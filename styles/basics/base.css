@@ -3,6 +3,7 @@
 }
 
 html {
+    scroll-behavior: smooth;
     font-family: josefin, sans-serif;
     color: var(--clrTxt);
     line-height: 1.25rem;

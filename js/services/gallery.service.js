@@ -17,6 +17,26 @@ const gTrans = {
     btnFlex: {
         en: `I'm flexible`,
         he: 'גמיש אנוכי'
+    },
+    'select-theme-all': {
+        en: `Select Theme`,
+        he: 'בחר נושא'
+    },
+    'select-theme-kids': {
+        en: `Kids`,
+        he: 'ילדים'
+    },
+    'select-theme-beach': {
+        en: `Beach`,
+        he: 'חוף'
+    },
+    'select-theme-dogs': {
+        en: `Dogs`,
+        he: 'כלבים'
+    },
+    'select-theme-evil': {
+        en: `Evil`,
+        he: 'רשע'
     }
 }
 

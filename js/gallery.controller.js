@@ -10,7 +10,7 @@ function renderWordsCloud() {
     const elWordsCloud = getDomElement('.word-cloud-container')
     let strHTML = Object.keys(words).map(word =>
         `<span style="font-size:clamp(0.7em, ${words[word] * 2 + 'px'},2em)" 
-        onclick="onSearchMeme(this.innerText)">${word}</span>` // Why can't i do words.word?
+        onclick="onWordCloudClick(this.innerText)">${word}</span>` // Why can't i do words.word?
     ).join('')
     elWordsCloud.innerHTML = strHTML
 }
@@ -38,6 +38,12 @@ function onClickFlexible() {
 function onFilterClick(key) {
     setFilterTheme(key) // Ask how to do it smarter
     renderImages()
+}
+
+function onWordCloudClick(key) {
+    getDomElement('.search-bar').value = key
+    console.log('key:', key)
+    onSearchMeme(key)
 }
 
 function onSetLang() {
