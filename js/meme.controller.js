@@ -22,13 +22,13 @@ function renderMeme() {
     const elImg = new Image()
     if (meme.dataUrl) elImg.src = meme.dataUrl
     else elImg.src = `images/${meme.selectedImgId}.jpg`
-    gElCanvas.height = (elImg.naturalHeight / elImg.naturalWidth) * gElCanvas.width
 
     elImg.addEventListener('load', handleMemeLoad(meme, elImg))
     handleUserInputText()
 }
 
 function handleMemeLoad(meme, elImg) {
+    gElCanvas.height = (elImg.naturalHeight / elImg.naturalWidth) * gElCanvas.width
     gCtx.drawImage(elImg, 0, 0, gElCanvas.width, gElCanvas.height)
     meme.lines.forEach((line, idx) => {
         if (!line.pos) line.pos = getInitialLinePos(idx)
@@ -72,6 +72,7 @@ function DisplayMemeEditor() {
 }
 
 function hideMemeEditor() {
+    debugger
     addClass('.meme-editor-container', 'hide')
     removeClass('.meme-editor-container', 'grid')
     onFilterClick('')

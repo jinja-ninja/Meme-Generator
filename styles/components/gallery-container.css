@@ -17,6 +17,10 @@
     object-fit: cover;
 }
 
+.gallery-container img:hover {
+    cursor: pointer;
+}
+
 img:nth-child(4n) {
     grid-column: span 2;
     grid-row: span 2;

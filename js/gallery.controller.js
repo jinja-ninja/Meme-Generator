@@ -25,6 +25,7 @@ function renderImages() {
 }
 
 function onSelectImg(imgId) {
+    createCustomMeme()
     initMemeEditor(imgId)
     document.body.scrollTop = document.documentElement.scrollTop = 0
 }
